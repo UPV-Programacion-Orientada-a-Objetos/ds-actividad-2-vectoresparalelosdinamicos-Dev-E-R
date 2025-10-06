@@ -1,17 +1,20 @@
 #include <iostream>
 #include <sstream>
+#include <string> // CORRECCIÓN 1: Incluir la librería para usar 'string'.
 
+// --- Declaraciones de funciones ---
 void addPackage();
 void dispatchPackage();
 void incrementCapacity();
 void inspectFront();
 void reportDestiny();
-void releaseMemory();
+void liberarMemoria(); // CORRECCIÓN 2: El nombre debe ser consistente.
+std::string priorityAText(int p); // CORRECCIÓN 3: Declarar la función para que 'inspectFront' la conozca.
 
-
+// --- Variables Globales ---
 int *idPackage = nullptr;
 double *weigth = nullptr;
-string *destiny = nullptr;
+std::string *destiny = nullptr; // Se recomienda usar std::string
 int *priority = nullptr;
 char *state = nullptr;
 
@@ -20,14 +23,12 @@ int front = 0;
 int packagesOnSystem = 0;
 int packageOnWait = 0;
 
-using namespace std;
-
 int main() {
     int opcion;
 
     idPackage = new int[capacity];
     weigth = new double[capacity];
-    destiny = new string[capacity];
+    destiny = new std::string[capacity];
     priority = new int[capacity];
     state = new char[capacity];
     
@@ -39,8 +40,7 @@ int main() {
         std::cout << "3. Inspeccionar Frente de Cola" << std::endl; 
         std::cout << "4. Reporte por Destino" << std::endl; 
         std::cout << "5. Salir (Liberar Memoria)" << std::endl; 
-        std::cout << "6. Mostrar Datos" << std::endl;;
-        std::cout << "Opcion:" << std::endl;
+        std::cout << "Opcion: ";
         std::cin >> opcion;
         switch (opcion)
         {
@@ -48,8 +48,8 @@ int main() {
                 addPackage();
                 break;
             case 2:
+                dispatchPackage(); 
                 break;
-                dispatchPackage();
             case 3:
                 inspectFront();
                 break;
@@ -57,7 +57,7 @@ int main() {
                 reportDestiny();
                 break;
             case 5:
-                releaseMemory();
+                liberarMemoria(); 
                 std::cout << "Saliendo...." << std::endl;
                 break;
             default:
@@ -90,14 +90,14 @@ void reportDestiny() {
         return;
     }
 
-    string searchDestiny;
+    std::string searchDestiny;
     std::cout << "Ingrese el destino para el reporte: ";
+    std::cin.ignore();
     std::getline(std::cin, searchDestiny);
 
     int destinyCount = 0;
     float totalDestinyWeigth = 0.0f;
 
-    // Iterar solo sobre los paquetes que están 'En Cola'
     for (int i = front; i < packagesOnSystem; ++i) {
         if (state[i] == 'E' && destiny[i] == searchDestiny) {
             destinyCount++;
@@ -107,7 +107,7 @@ void reportDestiny() {
     
     std::cout << "Reporte para destino '" << searchDestiny << "':" << std::endl;
     if (destinyCount > 0) {
-        float promWeigth= totalDestinyWeigth / destinyCount;
+        float promWeigth = totalDestinyWeigth / destinyCount;
         std::cout << "  Paquetes En Cola: " << destinyCount << std::endl;
         std::cout << "  Peso Promedio: " << promWeigth << " kg" << std::endl;
     } else {
@@ -140,7 +140,7 @@ void inspectFront(){
               << " kg | Destino: " << destiny[front] << " | Prioridad: " << priorityAText(priority[front]) << std::endl;
 }
 
-string priorityAText(int p) {
+std::string priorityAText(int p) {
     switch (p) {
         case 1: return "Alta";
         case 2: return "Media";
@@ -155,7 +155,7 @@ void addPackage(){
         incrementCapacity();
     }
     int id, prioridad;
-    float peso;
+    double peso;
     std::string destino;
 
     std::cout << "Ingrese ID: ";
@@ -163,7 +163,9 @@ void addPackage(){
     std::cout << "Ingrese Peso (kg): ";
     std::cin >> peso;
     std::cout << "Ingrese Destino: ";
-    std::cin.ignore(); 
+    std::cin.ignore();
+    std::getline(std::cin, destino);
+    
     std::cout << "Ingrese Prioridad (1=Alta, 2=Media, 3=Baja): ";
     std::cin >> prioridad;
 
@@ -183,7 +185,7 @@ void addPackage(){
 void incrementCapacity(){
     int *ptr_aux_idPackage = new int[capacity + 1];
     double *ptr_aux_weigth = new double[capacity + 1];
-    string *ptr_aux_destiny = new string[capacity + 1];
+    std::string *ptr_aux_destiny = new std::string[capacity + 1];
     int *ptr_aux_priority = new int[capacity + 1];
     char *ptr_aux_state = new char[capacity + 1];
     
@@ -195,13 +197,11 @@ void incrementCapacity(){
         ptr_aux_state[i] = state[i];
     }
     
-    if (idPackage != nullptr && weigth != nullptr && destiny != nullptr && priority != nullptr && state != nullptr) {
-        delete[] idPackage;
-        delete[] weigth;
-        delete[] destiny;
-        delete[] priority;
-        delete[] state;
-    }
+    delete[] idPackage;
+    delete[] weigth;
+    delete[] destiny;
+    delete[] priority;
+    delete[] state;
 
     idPackage = ptr_aux_idPackage;
     weigth = ptr_aux_weigth;
