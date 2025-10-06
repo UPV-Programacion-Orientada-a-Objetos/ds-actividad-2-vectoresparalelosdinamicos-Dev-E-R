@@ -1,20 +1,19 @@
 #include <iostream>
 #include <sstream>
-#include <string> // CORRECCIÓN 1: Incluir la librería para usar 'string'.
+#include <string>
 
-// --- Declaraciones de funciones ---
 void addPackage();
 void dispatchPackage();
 void incrementCapacity();
 void inspectFront();
 void reportDestiny();
-void liberarMemoria(); // CORRECCIÓN 2: El nombre debe ser consistente.
-std::string priorityAText(int p); // CORRECCIÓN 3: Declarar la función para que 'inspectFront' la conozca.
+void liberarMemoria(); 
+std::string priorityAText(int p); 
 
-// --- Variables Globales ---
+
 int *idPackage = nullptr;
 double *weigth = nullptr;
-std::string *destiny = nullptr; // Se recomienda usar std::string
+std::string *destiny = nullptr;
 int *priority = nullptr;
 char *state = nullptr;
 
